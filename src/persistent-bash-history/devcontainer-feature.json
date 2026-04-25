@@ -1,0 +1,14 @@
+{
+    "id": "persistent-bash-history",
+    "version": "1.0.0",
+    "name": "Persistent Bash History",
+    "description": "Persists bash command history across dev container rebuilds via a per-project Docker named volume.",
+    "options": {},
+    "mounts": [
+        {
+            "source": "${localWorkspaceFolderBasename}-bashhistory",
+            "target": "/commandhistory",
+            "type": "volume"
+        }
+    ]
+}
