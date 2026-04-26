@@ -6,11 +6,16 @@ A per-project Docker named volume is mounted at `/usr/local/share/claude-code-co
 
 ## Example usage
 
+Pair it with the Claude Code CLI feature — this feature handles config persistence only, not CLI installation:
+
 ```jsonc
 "features": {
+    "ghcr.io/devcontainers-extra/features/claude-code:2": {},
     "ghcr.io/j-c/devcontainer-features/claude-code-config:1": {}
 }
 ```
+
+`installsAfter` ensures the CLI installs first when both are declared. The config feature also works standalone (volume + symlink + seed) if you install the CLI some other way.
 
 ## Options
 
@@ -18,11 +23,11 @@ None.
 
 ## How it works
 
-- Auto-installs `ghcr.io/devcontainers-extra/features/claude-code:2` (the Claude Code CLI) via `dependsOn`, so consumers don't need to declare it separately.
 - Mounts a Docker volume named `${localWorkspaceFolderBasename}-claude-code-config` at `/usr/local/share/claude-code-config`.
 - Bind-mounts the host's `~/.claude/.credentials.json` and `~/.claude/settings.json` into that directory so credentials and settings come from the host.
-- At install time, resolves the remote user from `_REMOTE_USER` / `_REMOTE_USER_HOME` (falling back to `_CONTAINER_USER` / `_CONTAINER_USER_HOME`) and symlinks the volume to `~/.claude` for that user.
+- At install time, resolves the remote user from `_REMOTE_USER` / `_REMOTE_USER_HOME` (falling back to a common non-root user — `vscode`, `node`, `codespace` — then `_CONTAINER_USER`) and symlinks the volume to `~/.claude` for that user.
 - Seeds `.claude.json` with `hasCompletedOnboarding: true` so the CLI doesn't trigger the onboarding flow on every fresh volume.
+- Declares `installsAfter` for `ghcr.io/devcontainers-extra/features/claude-code` so the CLI is in place when the seed records its version, but doesn't require it.
 
 ## Notes
 
