@@ -1,0 +1,27 @@
+{
+    "id": "claude-code-config",
+    "version": "1.0.0",
+    "name": "Claude Code Config",
+    "description": "Shares Claude Code config across dev container rebuilds via a per-project named volume symlinked to ~/.claude, with the host's Claude credentials and settings bind-mounted in.",
+    "options": {},
+    "dependsOn": {
+        "ghcr.io/devcontainers-extra/features/claude-code:2": {}
+    },
+    "mounts": [
+        {
+            "source": "${localWorkspaceFolderBasename}-claude-code-config",
+            "target": "/usr/local/share/claude-code-config",
+            "type": "volume"
+        },
+        {
+            "source": "${localEnv:HOME}${localEnv:USERPROFILE}/.claude/.credentials.json",
+            "target": "/usr/local/share/claude-code-config/.credentials.json",
+            "type": "bind"
+        },
+        {
+            "source": "${localEnv:HOME}${localEnv:USERPROFILE}/.claude/settings.json",
+            "target": "/usr/local/share/claude-code-config/settings.json",
+            "type": "bind"
+        }
+    ]
+}
