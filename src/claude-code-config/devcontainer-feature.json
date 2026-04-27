@@ -4,6 +4,9 @@
     "name": "Claude Code Config",
     "description": "Shares Claude Code config across dev container rebuilds via a per-project named volume symlinked to ~/.claude, with the host's Claude credentials and settings bind-mounted in.",
     "options": {},
+    "containerEnv": {
+        "CLAUDE_CONFIG_DIR": "/usr/local/share/claude-code-config"
+    },
     "installsAfter": [
         "ghcr.io/devcontainers-extra/features/claude-code"
     ],

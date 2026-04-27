@@ -16,6 +16,7 @@ for candidate in /root/.claude /home/*/.claude; do
     fi
 done
 
+check "CLAUDE_CONFIG_DIR env var set" test "$CLAUDE_CONFIG_DIR" = "$CONFIG_DIR"
 check "config volume mountpoint exists" test -d "$CONFIG_DIR"
 check "claude.json seeded" test -f "$CONFIG_DIR/.claude.json"
 check "claude.json has onboarding flag" grep -qF '"hasCompletedOnboarding":true' "$CONFIG_DIR/.claude.json"
