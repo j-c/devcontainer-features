@@ -65,6 +65,36 @@ else
     CREATED_SEED=1
 fi
 
+mkdir -p /usr/local/share/claude-code-host-claude
+
+# On every container start:
+# - If the host's .credentials.json is non-empty, symlink the active path to it so
+#   reads and writes (token refreshes) flow directly to the host file.
+# - If the host's file is absent or empty (Docker placeholder), and the volume has
+#   real credentials from a previous container login, copy those to the host and then
+#   symlink so future token refreshes reach the host.
+# - Otherwise leave things clean — no empty file is ever written to the host.
+cat > /usr/local/bin/claude-code-config-start.sh << 'SCRIPT'
+#!/bin/sh
+CREDS="/usr/local/share/claude-code-config/.credentials.json"
+HOST="/usr/local/share/claude-code-host-claude/.credentials.json"
+
+# Remove broken symlink (host file was deleted since last start)
+[ -L "$CREDS" ] && [ ! -f "$CREDS" ] && rm -f "$CREDS"
+
+if [ -f "$HOST" ] && [ -s "$HOST" ]; then
+    # Host has credentials → symlink active path to host file
+    [ "$(readlink "$CREDS" 2>/dev/null)" = "$HOST" ] || { rm -f "$CREDS"; ln -s "$HOST" "$CREDS"; }
+elif [ -f "$CREDS" ] && [ -s "$CREDS" ] && [ ! -L "$CREDS" ]; then
+    # Volume has credentials but host doesn't → push to host, then symlink
+    cp "$CREDS" "$HOST" 2>/dev/null && { rm -f "$CREDS"; ln -s "$HOST" "$CREDS"; } || true
+else
+    # Nothing valid — remove any empty placeholder so Claude Code prompts cleanly
+    [ -f "$CREDS" ] && [ ! -s "$CREDS" ] && rm -f "$CREDS" 2>/dev/null || true
+fi
+SCRIPT
+chmod +x /usr/local/bin/claude-code-config-start.sh
+
 chown "$USERNAME:$USERNAME" "$CONFIG_DIR" 2>/dev/null || true
 chown -h "$USERNAME:$USERNAME" "$LINK_PATH" 2>/dev/null || true
 

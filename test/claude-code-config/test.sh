@@ -22,10 +22,9 @@ check "claude.json seeded" test -f "$CONFIG_DIR/.claude.json"
 check "claude.json has onboarding flag" grep -qF '"hasCompletedOnboarding":true' "$CONFIG_DIR/.claude.json"
 check "~/.claude symlink found" test -n "$LINK"
 check "~/.claude resolves into config volume" test -d "${LINK:-/dev/null}/"
-# Bind mounts surface inside the volume (CI stubs them; tolerate absence locally).
-if [ -e "$CONFIG_DIR/.credentials.json" ] || [ -e "$CONFIG_DIR/settings.json" ]; then
-    check "credentials.json bind-mounted as a file" test -f "$CONFIG_DIR/.credentials.json"
-    check "settings.json bind-mounted as a file" test -f "$CONFIG_DIR/settings.json"
+# .credentials.json is a symlink into the host-claude bind mount when the host has credentials.
+if [ -e "$CONFIG_DIR/.credentials.json" ]; then
+    check ".credentials.json is a symlink to host file" test -L "$CONFIG_DIR/.credentials.json"
 fi
 
 reportResults
