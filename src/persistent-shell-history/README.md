@@ -1,12 +1,11 @@
-# Persistent Shell History (`persistent-shell-history`)
 
-Persists command history for all detected shells across dev container rebuilds.
+# Persistent Shell History (persistent-shell-history)
 
-A per-project Docker named volume is mounted at `/commandhistory`. At install time the script detects which shells are present (bash, zsh, fish) and configures each one to write history to the shared volume, so history survives container rebuilds.
+Persists command history for all detected shells (bash, zsh, fish) across dev container rebuilds via a per-project Docker named volume.
 
-## Example usage
+## Example Usage
 
-```jsonc
+```json
 "features": {
     "ghcr.io/j-c/devcontainer-features/persistent-shell-history:1": {}
 }
@@ -14,20 +13,12 @@ A per-project Docker named volume is mounted at `/commandhistory`. At install ti
 
 ## Options
 
-None.
+| Options Id | Description | Type | Default Value |
+|-----|-----|-----|-----|
 
-## How it works
 
-- Mounts a Docker volume named `${localWorkspaceFolderBasename}-shellhistory` at `/commandhistory`.
-- For each shell found on `PATH` at install time:
-  - **bash** — sets `HISTFILE=/commandhistory/.bash_history` and `PROMPT_COMMAND='history -a'` in `~/.bashrc`.
-  - **zsh** — sets `HISTFILE=/commandhistory/.zsh_history` and `setopt INC_APPEND_HISTORY` in `~/.zshrc`.
-  - **fish** — sets `fish_history` to `/commandhistory/fish_history` in `~/.config/fish/config.fish`.
-- All rc-file writes are idempotent (marker-guarded) — safe to re-run.
 
-## Notes
 
-- Each project gets its own history volume (named after the workspace folder).
-- The volume persists when the container is rebuilt; remove with `docker volume rm <project>-shellhistory`.
-- Requires a non-root remote user (typically `vscode`); falls back to `root` if `_REMOTE_USER` is unset.
-- Only shells present at image-build time are configured; shells installed afterward will not be auto-configured.
+---
+
+_Note: This file was auto-generated from the [devcontainer-feature.json](https://github.com/j-c/devcontainer-features/blob/main/src/persistent-shell-history/devcontainer-feature.json).  Add additional notes to a `NOTES.md`._
