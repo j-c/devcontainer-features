@@ -1,0 +1,14 @@
+{
+    "id": "persistent-shell-history",
+    "version": "1.0.0",
+    "name": "Persistent Shell History",
+    "description": "Persists command history for all detected shells (bash, zsh, fish) across dev container rebuilds via a per-project Docker named volume.",
+    "options": {},
+    "mounts": [
+        {
+            "source": "${localWorkspaceFolderBasename}-shellhistory",
+            "target": "/commandhistory",
+            "type": "volume"
+        }
+    ]
+}

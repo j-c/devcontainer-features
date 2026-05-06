@@ -7,6 +7,7 @@ A small collection of personal [dev container features](https://containers.dev/i
 | Feature | Description |
 | --- | --- |
 | [`persistent-bash-history`](src/persistent-bash-history) | Persists bash command history across dev container rebuilds via a per-project Docker named volume. |
+| [`persistent-shell-history`](src/persistent-shell-history) | Persists command history for all detected shells (bash, zsh, fish) across dev container rebuilds via a per-project Docker named volume. |
 | [`claude-code-config`](src/claude-code-config) | Shares Claude Code config across rebuilds via a per-project named volume and bind-mounts the host's Claude credentials into the container. Pair with `ghcr.io/devcontainers-extra/features/claude-code:2`. |
 
 ## Usage
