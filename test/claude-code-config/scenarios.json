@@ -1,0 +1,46 @@
+{
+    "bookworm_vscode": {
+        "image": "mcr.microsoft.com/devcontainers/base:bookworm",
+        "remoteUser": "vscode",
+        "features": { "claude-code-config": {} }
+    },
+    "node_image": {
+        "image": "node:22-bookworm-slim",
+        "remoteUser": "node",
+        "features": { "claude-code-config": {} }
+    },
+    "root_user": {
+        "image": "debian:bookworm-slim",
+        "remoteUser": "root",
+        "features": { "claude-code-config": {} }
+    },
+    "custom_user": {
+        "build": { "dockerfile": "Dockerfile" },
+        "remoteUser": "dev",
+        "features": { "claude-code-config": {} }
+    },
+    "compose_vscode": {
+        "dockerComposeFile": "docker-compose.yml",
+        "service": "app",
+        "workspaceFolder": "/workspace",
+        "remoteUser": "vscode",
+        "features": { "claude-code-config": {} }
+    },
+    "skip_onboarding_false": {
+        "image": "mcr.microsoft.com/devcontainers/base:bookworm",
+        "remoteUser": "vscode",
+        "features": { "claude-code-config": { "skipOnboarding": false } }
+    },
+    "stray_file_mount": {
+        "image": "mcr.microsoft.com/devcontainers/base:bookworm",
+        "remoteUser": "vscode",
+        "mounts": [
+            {
+                "source": "${localWorkspaceFolder}/.devcontainer/stray-creds.json",
+                "target": "/usr/local/share/claude-code-config/.credentials.json",
+                "type": "bind"
+            }
+        ],
+        "features": { "claude-code-config": {} }
+    }
+}
