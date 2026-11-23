@@ -1,26 +1,26 @@
 {
     "id": "claude-code-config",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "name": "Claude Code Config",
-    "description": "Shares Claude Code config across dev container rebuilds via a per-project named volume symlinked to ~/.claude, with the host's Claude credentials synced via postStartCommand.",
-    "options": {},
-    "containerEnv": {
-        "CLAUDE_CONFIG_DIR": "/usr/local/share/claude-code-config"
+    "documentationURL": "https://github.com/j-c/devcontainer-features/tree/main/src/claude-code-config",
+    "description": "Persists Claude Code config and credentials (~/.claude and ~/.claude.json) across dev container rebuilds in a per-project named volume. Volume-only: nothing is mounted from the host.",
+    "options": {
+        "skipOnboarding": {
+            "type": "boolean",
+            "default": true,
+            "description": "Set hasCompletedOnboarding=true in ~/.claude.json so the CLI does not show the first-run onboarding on a fresh volume."
+        }
     },
+    "entrypoint": "/usr/local/share/claude-code-config-feature/entrypoint.sh",
     "installsAfter": [
-        "ghcr.io/devcontainers-extra/features/claude-code"
+        "ghcr.io/devcontainers-extra/features/claude-code",
+        "ghcr.io/anthropics/devcontainer-features/claude-code"
     ],
-    "postStartCommand": "/usr/local/bin/claude-code-config-start.sh",
     "mounts": [
         {
             "source": "${localWorkspaceFolderBasename}-claude-code-config",
             "target": "/usr/local/share/claude-code-config",
             "type": "volume"
-        },
-        {
-            "source": "${localEnv:HOME}${localEnv:USERPROFILE}/.claude",
-            "target": "/usr/local/share/claude-code-host-claude",
-            "type": "bind"
         }
     ]
 }

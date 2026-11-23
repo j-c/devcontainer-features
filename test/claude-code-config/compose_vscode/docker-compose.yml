@@ -1,0 +1,8 @@
+services:
+  app:
+    image: mcr.microsoft.com/devcontainers/base:bookworm
+    command: sleep infinity
+    environment:
+      COMPOSE_MARKER: "1"
+    volumes:
+      - ..:/workspace:cached
